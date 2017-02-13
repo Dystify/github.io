@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<script type="text/javascript" src="../template/js/jquery/jquery.js"></script>
+<script type="text/javascript" src="../template/js/common/manualLib.js"></script>
+<script type="text/javascript" src="../tocData.js"></script>
+<link rel="stylesheet" type="text/css" href="../template/css/template.css" />
+<title>3.3 Hardware Specifications</title>
+</head>
+<body data-reassemble="autoindex=no,forceNoLabel=yes">
+<div id="autoindex_content">
+<div class="body_content">
+<noscript>
+<div style="border: 4px double black; margin: 4px; padding: 2px; font-weight: bold; background-color: #FFFFCC;">
+<p>Some features in this documentation are unavailable because JavaScript is not enabled in your browser. The table of contents is available only if JavaScript is enabled. Enable JavaScript and reload this page.</p>
+</div>
+</noscript>
+<div class="page_navigation_top">
+<table class="page_navi_root">
+<tr>
+<td class="page_navi_left"></td>
+<td class="page_navi_right"></td>
+</tr>
+</table>
+</div>
+<div class="breadcrumb"></div>
+
+<!-- 3.3 Hardware Specifications -->
+<div class="pagetitle" id="PageId_124923644">3.3 Hardware Specifications</div>
+<div class="text_separate">
+<p>The following is a description of hardware specifications and functionality available from the application. There may be more restrictions on functionality available from applications compared to hardware specifications.</p>
+<p>For more information, see the NintendoSDK documentation.</p>
+<div class="table">
+  <a name="AutoAnchor_124923644_table001"></a>Table 3-3  Hardware Specifications</div>
+<table class="table">
+  <tbody>
+    <tr>
+      <th>Item</th>
+      <th>Hardware Specifications</th>
+      <th>Functionality Available From the Application</th>
+    </tr>
+    <tr>
+      <td>CPU</td>
+      <td>
+        <p>Four ARM Cortex-A57 cores, maximum 2 GHz</p>
+        <p>L2 cache, 2 MB</p>
+        <p>64-bit ARMv8</p>
+        <p>Crypto extension enabled</p>
+      </td>
+      <td>
+        <p>Three cores</p>
+        <p>(The clock count is TBD.)</p>
+      </td>
+    </tr>
+    <tr>
+      <td>GPU</td>
+      <td>
+        <p>NVIDIA second-generation Maxwell architecture</p>
+        <p>256 CUDA cores, maximum 1 GHz</p>
+        <p>1024 FLOPS/cycle</p>
+        <p>Texture: 16 pixels/cycle</p>
+        <p>Fill: 14.4 pixels/cycle</p>
+      </td>
+      <td>TBD</td>
+    </tr>
+    <tr>
+      <td>Video Decoder</td>
+      <td>
+        <p>H.265 (3840&times;2160 60 fps)</p>
+        <p>H.264 (3840&times;2160 60 fps)</p>
+        <p>VP9 (3840&times;2160 60 fps)</p>
+        <p>VP8 (3840&times;2160 60 fps)</p>
+        <p>MPEG4 (1920&times;1080 120 fps)</p>
+        <p>MPEG2 (3840&times;2160 60 fps)</p>
+      </td>
+      <td>Supports only H.264, VP9 and VP8.</td>
+    </tr>
+    <tr>
+      <td>Main memory</td>
+      <td>
+        <p>Capacity of 4 GB</p>
+        <p>Bandwidth: 25.6 GB/s</p>
+        <p>VRAM: shared</p>
+      </td>
+      <td>
+        <p>Capacity of 3.25 GB</p>
+        <p>(TBD. The current capacity should be ultimately available.)</p>
+      </td>
+    </tr>
+    <tr>
+      <td>System Memory</td>
+      <td>Capacity: 32 GB, Maximum transfer rate: 400 MB/s</td>
+      <td>
+        <p>Used as a location for saving save data.</p>
+        <p>(Also the location to which applications are installed.)</p>
+      </td>
+    </tr>
+    <tr>
+      <td>SD Card</td>
+      <td>Supports microSD, SDHC, and SDXC cards.</td>
+      <td class="highlight-grey">
+        <p>Disabled</p>
+        <p>(Support is planned for direct reading and writing for development purposes.)</p>
+      </td>
+    </tr>
+    <tr>
+      <td>Wireless LAN</td>
+      <td>IEEE 802.11 a/b/g/n/ac</td>
+      <td>No constraints.</td>
+    </tr>
+    <tr>
+      <td>Wired LAN</td>
+      <td>USB connection option, 1 gigabit per second</td>
+      <td>No constraints.</td>
+    </tr>
+    <tr>
+      <td>Bluetooth</td>
+      <td>Bluetooth 4.0 + LE</td>
+      <td class="highlight-grey">Disabled</td>
+    </tr>
+    <tr>
+      <td>USB</td>
+      <td>USB 2.0 and 3.0</td>
+      <td class="highlight-grey">Disabled</td>
+    </tr>
+    <tr>
+      <td>Video Output</td>
+      <td>
+        <p>60 fps, at a maximum of 1920&times;1080 pixels</p>
+        <p>Or 30 fps at 3840&times;2160 pixels</p>
+      </td>
+      <td>60 fps, at a maximum of 1920&times;1080 pixels</td>
+    </tr>
+    <tr>
+      <td>Audio Output</td>
+      <td>Maximum 192 kHz, 24-bit, 7.1 channels</td>
+      <td>Maximum 48 kHz, 16-bit, 5.1 channels</td>
+    </tr>
+    <tr>
+      <td>Built-In Display</td>
+      <td>6.2&quot; IPS LCD, 1280&times;720 pixels</td>
+      <td>No constraints.</td>
+    </tr>
+    <tr>
+      <td>Built-In Speakers</td>
+      <td>
+        <p>Stereo</p>
+        <p>48 kHz, 16 bit, 2 ch</p>
+      </td>
+      <td>No constraints.</td>
+    </tr>
+    <tr>
+      <td>Built-In Touch Screen</td>
+      <td>Capacitance method, 10-point multi-touch, 1280&times;720 dots</td>
+      <td>Cannot get values for the 15 dots at the edges.</td>
+    </tr>
+    <tr>
+      <td>Built-In Brightness Sensor</td>
+      <td>-</td>
+      <td class="highlight-grey">Disabled</td>
+    </tr>
+  </tbody>
+</table>
+<!--Remove-->
+</div>
+<div class="breadcrumb_bottom"></div>
+<div class="page_navigation">
+<table class="page_navi_root">
+<tr>
+<td class="page_navi_left"></td>
+<td class="page_navi_right"></td>
+</tr>
+<tr><td colspan="2" class="page_navi_bottom"></td></tr>
+</table>
+</div>
+<p>&nbsp;</p>
+<hr />
+<p>CONFIDENTIAL</p>
+</div>
+</div>
+</body>
+</html>

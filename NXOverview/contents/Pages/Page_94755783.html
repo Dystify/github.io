@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<script type="text/javascript" src="../template/js/jquery/jquery.js"></script>
+<script type="text/javascript" src="../template/js/common/manualLib.js"></script>
+<script type="text/javascript" src="../tocData.js"></script>
+<link rel="stylesheet" type="text/css" href="../template/css/template.css" />
+<title>8 Development Environment</title>
+</head>
+<body data-reassemble="autoindex=no,forceNoLabel=yes">
+<div id="autoindex_content">
+<div class="body_content">
+<noscript>
+<div style="border: 4px double black; margin: 4px; padding: 2px; font-weight: bold; background-color: #FFFFCC;">
+<p>Some features in this documentation are unavailable because JavaScript is not enabled in your browser. The table of contents is available only if JavaScript is enabled. Enable JavaScript and reload this page.</p>
+</div>
+</noscript>
+<div class="page_navigation_top">
+<table class="page_navi_root">
+<tr>
+<td class="page_navi_left"></td>
+<td class="page_navi_right"></td>
+</tr>
+</table>
+</div>
+<div class="breadcrumb"></div>
+
+<!-- 8 Development Environment -->
+<div class="pagetitle" id="PageId_94755783">8 Development Environment</div>
+<div class="text_separate">
+<p>This section introduces the development hardware and software used for NX application development.</p>
+<h1 id="Anchor_94755783_h1_1">Development Hardware</h1>
+<p>There are two types of development hardware: the SDEV, with its advanced features, and the EDEV, in a format that more closely resembles a production device. As indicated in the following descriptions, their characteristics and features differ, allowing you to choose the equipment that includes the features that most meet your development needs.</p>
+<h2 id="Anchor_94755783_h2_1">SDEV</h2>
+<p>SDEV is a device with advanced features, including many external interfaces that are useful for development but not found in the product. The SDEV motherboard has a built-in, dedicated PCB for adding extra features, making the SDEV larger than the EDEV.</p>
+<p>The SDEV is equipped with an HDMI output port and a debug controller connection port, and connects to the PC by a wired Ethernet connection. However, it has no built-in battery, so when running it, power must be supplied via an AC adapter.</p>
+<p>For more information about the SDEV, see the <em>SDEV Operations Manual</em>.</p>
+<div class="figure">
+  <a name="AutoAnchor_94755783_figure001"></a>Figure 8-1  Appearance of the SDEV</div>
+<p>
+  <img src="../Attachments/Attach_94755783/106443188.png" width="800" />
+</p>
+<h2 id="Anchor_94755783_h2_2">EDEV</h2>
+<p>The EDEV is development hardware that resembles the retail device. EDEV offers fewer debugging features than SDEV, but you can develop an entire application using only EDEV.</p>
+<p>The EDEV looks like a retail device and has a built-in battery. It allows you to test applications in a cable-free environment.</p>
+<div class="selectable_private">
+  <p xmlns="">For more information about the EDEV, see the <em>EDEV Operations Manual</em>.</p>
+  <div class="figure">
+    <a name="AutoAnchor_94755783_figure002"></a>Figure 8-2  Appearance of the EDEV (With JOY-CON Attached)</div>
+  <p xmlns="">
+    <img src="../Attachments/Attach_94755783/161441701.png" width="700" />
+  </p>
+</div>
+<h2 id="Anchor_94755783_h2_3">NX Development Cards</h2>
+<p>NX development cards are NX game cards that can be used on development hardware. The NX development card capacity is 32 GB.</p>
+<h2 id="Anchor_94755783_h2_4">Comparing SDEV and EDEV</h2>
+<p>The main features of SDEV and EDEV are as follows.</p>
+<div class="table">
+  <a name="AutoAnchor_94755783_table001"></a>Table 8-1  Comparing SDEV and EDEV Features</div>
+<p>O --- Supported X --- Not Supported</p>
+<table class="table">
+  <tbody>
+    <tr>
+      <th />
+      <th>SDEV</th>
+      <th>EDEV</th>
+      <th>(For Reference) NX Full Retail Unit</th>
+    </tr>
+    <tr>
+      <th>Shape</th>
+      <td>The back is thicker than the back of the retail unit.</td>
+      <td>Identical to the retail unit.</td>
+      <td>－</td>
+    </tr>
+    <tr>
+      <th>Main memory</th>
+      <td>4 GB LPDDR4</td>
+      <td>4 GB LPDDR4</td>
+      <td>4 GB LPDDR4</td>
+    </tr>
+    <tr>
+      <th>System memory</th>
+      <td>64 GB eMMC</td>
+      <td>64 GB eMMC</td>
+      <td>32 GB eMMC</td>
+    </tr>
+    <tr>
+      <th>NX Game Cards</th>
+      <td>Can read or write NX development cards.</td>
+      <td>Can read or write NX development cards.</td>
+      <td>Can read or write retail unit NX game cards.</td>
+    </tr>
+    <tr>
+      <th>Connecting to a PC</th>
+      <td>Ethernet (1 GB)</td>
+      <td>USB 3.0 (Requires a separate external device.)</td>
+      <td>&times;</td>
+    </tr>
+    <tr>
+      <th>Control the NX hardware from a PC</th>
+      <td>〇</td>
+      <td>&times;</td>
+      <td>&times;</td>
+    </tr>
+    <tr>
+      <th>Uses debug controller</th>
+      <td>
+        <p>Wii Classic Controller Pro</p>
+        <p>Supports retail device </p>
+      </td>
+      <td>&times;</td>
+      <td>&times;</td>
+    </tr>
+    <tr>
+      <th>HDMI capture of handheld mode (LCD screen)</th>
+      <td>〇</td>
+      <td>&times;</td>
+      <td>&times;</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="Anchor_94755783_h1_2">Software</h1>
+<h2 id="Anchor_94755783_h2_5">SDK</h2>
+<p>To develop NX applications, use NintendoSDK (the standardized development environment for the Nintendo platform) and an expansion module for the NX.</p>
+<p>For more information, see the NintendoSDK documentation.</p>
+<h2 id="Anchor_94755783_h2_6">Game Engine</h2>
+<p>This section describes the game engines available on the NX system.</p>
+<h3 id="Anchor_94755783_h3_1">Unreal Engine 4</h3>
+<p>Unreal Engine 4 (UE4) is a game engine developed by Epic Games. It contains all of the features required for game development and provides a toolset that enables high-quality game experiences.</p>
+<p>UE4 contains not only high-level graphics power, but also several features that represent a major evolution for the development environment. These features include Blueprint, a visual scripting system that allows you to create games without using any code; Cascade, which can freely manipulate millions of particles to create realistic flame and smoke; and Content Browser, which provides functional asset management.</p>
+<p>UE4 is also upgraded for free by Epic Games every few months, and they are constantly adding new features, improvements, and bug fixes. The NX version will include these latest revisions, and will be optimized so that you can create games while taking full advantage of the hardware performance. Note that there may be restrictions on available functionality, depending on NX performance.</p>
+<p>You must obtain a license for UE4 from Epic Games.</p>
+<!--Remove-->
+</div>
+<div class="breadcrumb_bottom"></div>
+<div class="page_navigation">
+<table class="page_navi_root">
+<tr>
+<td class="page_navi_left"></td>
+<td class="page_navi_right"></td>
+</tr>
+<tr><td colspan="2" class="page_navi_bottom"></td></tr>
+</table>
+</div>
+<p>&nbsp;</p>
+<hr />
+<p>CONFIDENTIAL</p>
+</div>
+</div>
+</body>
+</html>
