@@ -58,8 +58,9 @@ PrintPage.insertIFRAME = function(dwin, data, mode)
 
   var url = data.getURL() + "?level=" + data.getQuery() + "&figure=" + data.getFigureNo() + "&table=" + data.getTableNo() + "&code=" + data.getCodeNo() + "&mode=" + mode + "&noindex=yes";
 
-  dwin.document.writeln("<div id=\"" + dstId + "\"></div>");
-  dwin.document.writeln("<iframe name=\"" + srcName + "\" id=\"" + srcId + "\" src=\"" + url + "\" style=\"display: none;\" onLoad=\"PrintPage.copybody('" + dstId + "', '" + srcId + "');\"></iframe>");
+  var html = '<div id="' + dstId + '"></div>';
+  html += '<iframe name="' + srcName + '" id="' + srcId + '" src="' + url + '" style="display: none;" onLoad="PrintPage.copybody(\'' + dstId + '\', \'' + srcId + '\');"></iframe>';
+  return html;
 }
 
 // 印刷用ページを生成
@@ -67,6 +68,19 @@ PrintPage.createPrintPage = function(dwin, tocObj)
 {
   if ((dwin == null) || (dwin.document == null)) return;
   if (tocObj == null) return;
+
+  // title.htmlの表示
+  var html = "";
+  if (tocObj.getWindowTitle() != "") {
+    document.title += (" - " + tocObj.getWindowTitle());
+  } else if (document.title == "") {
+    document.title = tocObj.getTitle();
+  }
+  if (tocObj.isEnableInsertTitlePage()) {
+    html += '<div class="body_content" id="view_title"></div>';
+    html += '<iframe name="iwin_title" id="ifrm_title" src="' + tocObj.getTitleFile() + '?noIndex=yes" style="display: none;" onLoad="PrintPage.copybody(\'view_title\', \'ifrm_title\');"></iframe>';
+  }
+
   var dataCount = tocObj.getDataCount();
   if (dataCount <= 0) return;
 
@@ -116,9 +130,10 @@ PrintPage.createPrintPage = function(dwin, tocObj)
       // 2015/09/04 印刷表示には出力しないページのフラグ
       if (dataObj.disablePrintPage) continue;
 
-      if (currentURL != prevURL) PrintPage.insertIFRAME(dwin, dataObj, nMode);
+      if (currentURL != prevURL) html += PrintPage.insertIFRAME(dwin, dataObj, nMode);
       prevURL = dataObj.getURL();
     }
   }
+  $("body").html(html);
 }
 

@@ -69,31 +69,6 @@ div.expand-hidden
 -->
 </style>
 </head>
-<body data-reassemble="forcenolabel=yes,forceNoIndex=yes">
-
-<script type="text/javascript">
-<!--
-  //var obj = createTocDataObject();
-  var obj = Reassemble.objectTocData;
-  if (obj.getWindowTitle() != "")
-  {
-    // 2015/01/27 ウィンドウタイトルを「ページ名 - ドキュメント名」に変更
-    document.title += (" - " + obj.getWindowTitle());
-  }
-  else if (document.title == "")
-  {
-    document.title = obj.getTitle();
-  }
-
-  if (obj.isEnableInsertTitlePage())
-  {
-    document.writeln("<div class=\"body_content\" id=\"view_title\"></div>");
-    document.writeln("<iframe name=\"iwin_title\" id=\"ifrm_title\" src=\"" + obj.getTitleFile() + "?noIndex=yes\" style=\"display: none;\" onLoad=\"PrintPage.copybody('view_title', 'ifrm_title');\"></iframe>");
-  }
-
-  PrintPage.createPrintPage(window, obj);
-// -->
-</script>
-
+<body data-reassemble="forcenolabel=yes,forceNoIndex=yes,printPage=yes">
 <hr /><p>CONFIDENTIAL</p></body>
 </html>
