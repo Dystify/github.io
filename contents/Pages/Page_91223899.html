@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<script type="text/javascript" src="../template/js/jquery/jquery.js"></script>
+<script type="text/javascript" src="../template/js/common/manualLib.js"></script>
+<script type="text/javascript" src="../tocData.js"></script>
+<link rel="stylesheet" type="text/css" href="../template/css/template.css" />
+<title>6.2 System Fonts</title>
+</head>
+<body data-reassemble="autoindex=no,forceNoLabel=yes">
+<div id="autoindex_content">
+<div class="body_content">
+<noscript>
+<div style="border: 4px double black; margin: 4px; padding: 2px; font-weight: bold; background-color: #FFFFCC;">
+<p>Some features in this documentation are unavailable because JavaScript is not enabled in your browser. The table of contents is available only if JavaScript is enabled. Enable JavaScript and reload this page.</p>
+</div>
+</noscript>
+<div class="page_navigation_top">
+<table class="page_navi_root">
+<tr>
+<td class="page_navi_left"></td>
+<td class="page_navi_right"></td>
+</tr>
+</table>
+</div>
+<div class="breadcrumb"></div>
+
+<!-- 6.2 System Fonts -->
+<div class="pagetitle" id="PageId_91223899">6.2 System Fonts</div>
+<div class="text_separate">
+<p>Describes NX system font specifications and cautions.</p>
+<h1 id="Anchor_91223899_h1_1">Basic Information</h1>
+<p>The system fonts are as follows.</p>
+<h3 id="Anchor_91223899_h3_1">For Japan/North America/Europe</h3>
+<p>A font that mainly includes characters of languages for Japan, Europe and North America.</p>
+<ul style="margin-left: 1.8em;">
+  <li>Font name: nintendo_udsg-r_std_003</li>
+  <li>7770 characters</li>
+</ul>
+<h3 id="Anchor_91223899_h3_2">For Hangul</h3>
+<p>A font that mainly includes characters for languages that use Hangul.</p>
+<ul style="margin-left: 1.8em;">
+  <li>Font name: nintendo_udsg-r_ko_003</li>
+  <li>17708 characters</li>
+</ul>
+<h3 id="Anchor_91223899_h3_3">For Simplified Chinese</h3>
+<p style="margin-left: 1.2em;">A font that mainly includes characters for languages that use simplified Chinese.</p>
+<ul style="margin-left: 1.8em;">
+  <li>Font name: <code>nintendo_udsg-r_org_zh-cn_003 &amp; nintendo_udsg-r_ext_zh-cn_003</code><ul><li>In the font data specifications, system fonts and supplementary fonts are used in combination.  <br />Use NintendoSDK features to set the priority for the read fonts. <br /><strong>The priority is (high) supplementary &gt; (low) system.</strong></li><li>System font: <code>nintendo_udsg-r_org_zh-cn_003</code><br /></li><li>Supplementary font: <code>nintendo_udsg-r_ext_zh-cn_003</code> (The character count is comparatively less than the system. Characters that are not included in this font are read from the system font.)</li></ul></li>
+  <li>29,138 characters</li>
+</ul>
+<h3 id="Anchor_91223899_h3_4">For Traditional Chinese</h3>
+<p>A font that mainly includes characters for languages that use traditional Chinese.</p>
+<ul style="margin-left: 1.8em;">
+  <li>Font name: <code>nintendo_udjxh-db_zh-tw_003</code></li>
+  <li>14549 characters</li>
+</ul>
+<h3 id="Anchor_91223899_h3_5">For Nintendo Extended Characters</h3>
+<p>An outline font of encoded pictograms made within Nintendo that we want to use as a system feature font.</p>
+<div class="selectable_private">
+  <ul xmlns="">
+    <li>Font names: <code>nintendo_ext_003</code>, which includes the extended characters for the Nintendo 3DS and the Wii U, and <code>nintendo_ext_LE_003</code>, which does not.</li>
+  </ul>
+</div>
+<h1 id="Anchor_91223899_h1_2">Supported Languages</h1>
+<p>The scopes for Japan/North America/Europe, Hangul, simplified Chinese and traditional Chinese are common encoded characters (common) and uncommon encoded characters (only).  <br />The supported languages for each scope are as follows.</p>
+<ul style="margin-left: 1.8em;">
+  <li>Common encoded characters (common): characters included in and shared by 4 fonts. ASCII, European and North American characters, kana characters, and generic symbols.</li>
+  <li>Uncommon encoded characters (only): characters that are unique to the individual fonts. Chinese characters for Asian languages. Separated within Unicode specifications.</li>
+</ul>
+<div class="table">
+  <a name="AutoAnchor_91223899_table001"></a>Table 6-1  Conditions for Common Encoded Characters and Uncommon Encoded Characters for Supported Languages.</div>
+<table class="table">
+  <tbody>
+    <tr>
+      <th>Common/Uncommon</th>
+      <th>Standard/Font</th>
+      <th>Of the Supported Languages, the Languages, Standards, and Symbols the NX Uses (Not Including System Languages)</th>
+    </tr>
+    <tr>
+      <th rowspan="12">
+        <p />
+        <p />
+        <p />
+        <p />
+        <p />
+        <p />
+        <p>common</p>
+      </th>
+      <td>ISO8859-1</td>
+      <td>Danish, Dutch (part), English, Finnish (part),<br />French (part), German, Icelandic, Irish,<br />Italian, Norwegian, Portuguese, Spanish, Swedish</td>
+    </tr>
+    <tr>
+      <td>ISO8859-2</td>
+      <td>Dutch, Czech, Slovakian, Slovenian, Hungarian</td>
+    </tr>
+    <tr>
+      <td>ISO8859-3</td>
+      <td>Turkish, Maltese</td>
+    </tr>
+    <tr>
+      <td>ISO8859-4</td>
+      <td>Estonian, Latvian, Lithuanian, Sami languages</td>
+    </tr>
+    <tr>
+      <td>ISO8859-5</td>
+      <td>Bulgarian, Russian, Ukrainian (part)</td>
+    </tr>
+    <tr>
+      <td>ISO8859-7</td>
+      <td>Modern Greek</td>
+    </tr>
+    <tr>
+      <td>ISO8859-13</td>
+      <td>U+201C (Characters)</td>
+    </tr>
+    <tr>
+      <td>ISO8859-14</td>
+      <td>Welsh (4 characters)</td>
+    </tr>
+    <tr>
+      <td>ISO8859-15</td>
+      <td>French, Finnish and Estonian (complete)</td>
+    </tr>
+    <tr>
+      <td>ISO8859-16</td>
+      <td>Hungarian, Italian, Polish, Romanian, Slovenian,<br />Finnish, French, German, Irish Gaelic (new orthography) (complete)</td>
+    </tr>
+    <tr>
+      <td>WGL4</td>
+      <td>Not included in ISO8859-*, but the standard that covers characters used in supported languages.</td>
+    </tr>
+    <tr>
+      <td>Symbols not included in the preceding standard.</td>
+      <td>
+        <p>Symbols not included in the preceding standard that can be used for Mii names in the 3DS and Wii U and for ordinary use.</p>
+      </td>
+    </tr>
+    <tr>
+      <th rowspan="2">only std (for Japan/North America/Europe)</th>
+      <td>JIS X0201</td>
+      <td>Japanese: JIS standard. Alphabet, numbers, katakana</td>
+    </tr>
+    <tr>
+      <td>JIS X0208</td>
+      <td>Japanese: JIS standard. Level 1 kanji, level 2 kanji</td>
+    </tr>
+    <tr>
+      <th rowspan="2">only zh-cn (simplified Chinese characters)</th>
+      <td>GB 2312</td>
+      <td>Simplified Chinese characters: Chinese national standard.</td>
+    </tr>
+    <tr>
+      <td>
+        <p>GB 18030-2005</p>
+      </td>
+      <td>Simplified Chinese characters: Chinese national standard.</td>
+    </tr>
+    <tr>
+      <th rowspan="2">only zh-tw (traditional Chinese characters)</th>
+      <td>Big5</td>
+      <td>Traditional Chinese characters: Taiwanese standard. Alphabet, numbers, symbols, kanji</td>
+    </tr>
+    <tr>
+      <td>CP950</td>
+      <td>Traditional Chinese characters: code page 950. A slight expansion of Big5.</td>
+    </tr>
+    <tr>
+      <th rowspan="2">only ko (Hangul)</th>
+      <td>KSX1001</td>
+      <td>Korean: Korean standard.  Alphabet, number, kana, kanji, Hangul (2350 characters). <br />Including Hangul Compatibility Jamo 94</td>
+    </tr>
+    <tr>
+      <td>Hangul part of KSC5601</td>
+      <td>Korean: Korean standard. All Hangul characters encoded (11172 characters)</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="Anchor_91223899_h1_3">Notes</h1>
+<ul>
+  <li>There is no variation in weight and typeface in regard to memory.</li>
+  <li>Can be made italic with the rendering engine. Boldface characters are possible, but using them consumes memory.</li>
+  <li>There is no support for pictograms.</li>
+</ul>
+<h1 id="Anchor_91223899_h1_4">Associated Data</h1>
+<p>The package for this documentation includes materials for checking the list of characters within the various system fonts.</p>
+<!--Remove-->
+<div class="selectable_private">
+  <div xmlns="">@table002: Description of the Character List Materials for System Fonts</div>
+  <div xmlns="">
+    <p />
+    <table style="margin-left: 1.5em;" class="table">
+      <tbody>
+        <tr>
+          <th>Category</th>
+          <th>Filename</th>
+          <th>Notes</th>
+        </tr>
+        <tr>
+          <td>For Japan/North America/Europe</td>
+          <td>
+            <a href="../Attachments/Attach_91223899/nintendo_udsg-r_std_003.xlsx">nintendo_udsg-r_std_003.xlsx</a>
+          </td>
+          <td />
+        </tr>
+        <tr>
+          <td>For Hangul</td>
+          <td>
+            <p>
+              <a href="../Attachments/Attach_91223899/nintendo_udsg-r_ko_003.xlsx">nintendo_udsg-r_ko_003.xlsx</a>
+            </p>
+          </td>
+          <td />
+        </tr>
+        <tr>
+          <td>For Simplified Chinese</td>
+          <td>
+            <p>
+              <a href="../Attachments/Attach_91223899/nintendo_udsg-r_org_ext_zh-cn_003.xlsx">nintendo_udsg-r_org_ext_zh-cn_003.xlsx</a>
+            </p>
+          </td>
+          <td>
+            <p>Combined using system and supplementary fonts within system features. <br />Characters that appear in red within the system fonts will appear preferentially using characters from the supplementary fonts.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>For Traditional Chinese</td>
+          <td>
+            <p>
+              <a href="../Attachments/Attach_91223899/nintendo_udjxh-db_zh-tw_003.xlsx">nintendo_udjxh-db_zh-tw_003.xlsx</a>
+            </p>
+          </td>
+          <td />
+        </tr>
+        <tr>
+          <td>For Nintendo Extended Characters</td>
+          <td>
+            <p>
+              <a href="../Attachments/Attach_91223899/nintendo_ext_003.pdf">nintendo_ext_003.pdf</a> (Includes 3DS and Wii U extended characters.)</p>
+            <p>
+              <a href="../Attachments/Attach_91223899/nintendo_ext_LE_003.pdf">nintendo_ext_LE_003.pdf</a> (Does not include 3DS and Wii U extended characters.)</p>
+          </td>
+          <td>
+            <div class="note_new">
+              <div class="note_new_left">Note</div>
+              <div class="note_new_right">
+                <p>Includes JOY-CON controller icons. Take note of this during use.</p>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+<div class="breadcrumb_bottom"></div>
+<div class="page_navigation">
+<table class="page_navi_root">
+<tr>
+<td class="page_navi_left"></td>
+<td class="page_navi_right"></td>
+</tr>
+<tr><td colspan="2" class="page_navi_bottom"></td></tr>
+</table>
+</div>
+<p>&nbsp;</p>
+<hr />
+<p>CONFIDENTIAL</p>
+</div>
+</div>
+</body>
+</html>

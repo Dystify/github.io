@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<script type="text/javascript" src="../template/js/jquery/jquery.js"></script>
+<script type="text/javascript" src="../template/js/common/manualLib.js"></script>
+<script type="text/javascript" src="../tocData.js"></script>
+<link rel="stylesheet" type="text/css" href="../template/css/template.css" />
+<title>6 Initializing the SDEV</title>
+</head>
+<body data-reassemble="autoindex=no,forceNoLabel=yes">
+<div id="autoindex_content">
+<div class="body_content">
+<noscript>
+<div style="border: 4px double black; margin: 4px; padding: 2px; font-weight: bold; background-color: #FFFFCC;">
+<p>Some features in this documentation are unavailable because JavaScript is not enabled in your browser. The table of contents is available only if JavaScript is enabled. Enable JavaScript and reload this page.</p>
+</div>
+</noscript>
+<div class="page_navigation_top">
+<table class="page_navi_root">
+<tr>
+<td class="page_navi_left"></td>
+<td class="page_navi_right"></td>
+</tr>
+</table>
+</div>
+<div class="breadcrumb"></div>
+
+<!-- 6 Initializing the SDEV -->
+<div class="pagetitle" id="PageId_96563591">6 Initializing the SDEV</div>
+<div class="text_separate">
+<h1 id="Anchor_96563591_h1_1">Initializing the SDEV</h1>
+<p>Initialize the SDEV firmware using a special tool. (This process usually takes about two minutes.)</p>
+<div class="info_new">
+  <div class="info_new_left">Info</div>
+  <div class="info_new_right">
+    <p>Warnings about the Windows Firewall are displayed several times during this process. Select <strong xmlns="">Allow access</strong>.</p>
+  </div>
+</div>
+<table class="table">
+  <tbody>
+    <tr>
+      <th>Procedure</th>
+      <th>Operation</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>
+        <p>Verify the value written on the sticker applied to the bottom of the SDEV.</p>
+        <p>(This value represents the SDEV's serial number. It is XAW02121013686 in the following example.)</p>
+        <div class="info_new">
+          <div class="info_new_left">Info</div>
+          <div class="info_new_right">
+            <p>The verified value is used to select the SDEV in step 3.</p>
+          </div>
+        </div>
+        <p />
+        <p>
+          <img src="../Attachments/Attach_96563591/163763401.jpg" width="500" />
+        </p>
+        <br />
+        <p />
+        <div class="info_new">
+          <div class="info_new_left">Info</div>
+          <div class="info_new_right">
+            <p xmlns="">
+              <strong>Note:</strong> For SDEV 1.6, verify the MAC address instead of the serial number.</p>
+            <p xmlns="">Verify the value written on the third sticker on the upper right of the back of the SDEV.</p>
+            <p xmlns="">(This value represents the SDEV MAC address. It is 40D28AB472B3 in the following example.)</p>
+            <p xmlns="" />
+            <p xmlns="">
+              <img src="../Attachments/Attach_96563591/165417366.png" width="500" />
+            </p>
+          </div>
+        </div>
+        <p />
+        <p />
+      </td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>
+        <p>Click the <strong>Initialize the SDEV</strong> button in the NintendoSDK Portal.</p>
+        <p />
+        <p>
+          <img src="../Attachments/Attach_96563591/165427178.png" width="500" />
+        </p>
+        <p />
+        <div class="info_new">
+          <div class="info_new_left">Info</div>
+          <div class="info_new_right">
+            <p xmlns="">To start the NintendoSDK Portal, run the <code>Portal.bat</code> file in the <code>NintendoSDK</code> folder.</p>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>
+        <p>Select the SDEV you want to initialize and begin initialization.</p>
+        <p />
+        <p>
+          <img src="../Attachments/Attach_96563591/112034531.png" />
+        </p>
+        <p />
+        <p>From the SDEV connection list under <strong>1. Select SDEV actual equipment</strong>, use the mouse to select the address verified in step 1 for the <strong>Serial</strong> number information.</p>
+        <p />
+        <p>In <strong>2. Select firmware version</strong>, in the combo box, specify the firmware version you want to use. If there are no particular instructions for which version to use, use <u><em>select default version</em></u>.</p>
+        <p />
+        <p>Next, to start SDEV initialization, in <strong>3. Start SDEV initialization</strong>, click <strong>Start initialization</strong>.</p>
+        <p />
+      </td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>
+        <p>If <strong><span style="color: rgb(0,255,0);">Success</span></strong> is displayed at the lower left of the log window, click the <strong>Exit</strong> button to close the tool.</p>
+        <p />
+        <p>
+          <img src="../Attachments/Attach_96563591/112034530.png" width="500" />
+        </p>
+        <div class="info_new">
+          <div class="info_new_left">Info</div>
+          <div class="info_new_right">
+            <p xmlns="">
+              <strong>Fan Operating Noise</strong>
+            </p>
+            <p xmlns="">When the login window in step 4 is displayed, the cooling fan inside the SDEV starts operating. <br />The fan is somewhat noisy, but that does not mean the unit is malfunctioning.</p>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="info_new">
+  <div class="info_new_left">Info</div>
+  <div class="info_new_right">
+    <p xmlns="">A sample has been built to check whether the SDEV was initialized correctly.</p>
+    <p xmlns="">The following sample shows an execution method.</p>
+    <ol xmlns="">
+      <li>To install, in the NintendoSDK Portal, click the <strong>Run VSI for NX installer</strong> button.</li>
+      <li>After completing step 1, click the <strong>Execute Sample</strong> button.</li>
+    </ol>
+    <p xmlns="">A logo like the following will be displayed if the SDEV was initialized correctly and VSI for NX was installed correctly.</p>
+    <p xmlns="">
+      <img src="../Attachments/Attach_96563591/165419105.png" width="500" />
+    </p>
+    <p xmlns="">
+      <strong>Note:</strong> This sample does not exit automatically. To exit the sample, select the connected target in Target Manager, and then from the shortcut menu that appears, select <strong>Reset</strong>.</p>
+  </div>
+</div>
+<h2 id="Anchor_96563591_h2_1"> Troubleshooting</h2>
+<ul>
+  <li>If the GUI application does not start in step 2, verify that the <code>NintendoSDK\Tools\CommandLineTools\InitializeSdevWin.exe</code> file exists. <br />If this file does not exist, it might have been deleted by a malfunction in the anti-virus software. Check that the anti-virus software has not malfunctioned.</li>
+  <li>If the SDEV initialization fails, <span style="color: rgb(255,0,0);"><strong>Fail</strong></span> is displayed instead of <strong><span style="color: rgb(0,255,0);">Success</span></strong> in step 4. <br />If that happens, try taking the following steps, repeating them a number of times. If the update still fails, contact the Support office.<ol><li>Exit Target Manager if it is running.<ul><li>Target Manager might be in the task tray, so also check there.</li></ul></li><li>Insert and remove the Wii U console's AC adapter connected to the SDEV.</li><li>Retry the procedure starting from step 2.</li></ol></li>
+  <li>Re-initialization might fail when using the <code>InitializeSdevWin.bat</code> file included with SDKs prior to NX Add-On 0.5.0 if you have already initialized the SDEV with an SDK from NX Add-On 0.5.0 or later. <br />When this happens, restore the SDEV and then resume the process from step 2.  For information about restoring the SDEV, in the <em>SDEV Operations Manual</em>, see the Troubleshooting section on the SDEV Console Startup Fails page.</li>
+</ul>
+<p />
+</div>
+<div class="breadcrumb_bottom"></div>
+<div class="page_navigation">
+<table class="page_navi_root">
+<tr>
+<td class="page_navi_left"></td>
+<td class="page_navi_right"></td>
+</tr>
+<tr><td colspan="2" class="page_navi_bottom"></td></tr>
+</table>
+</div>
+<p>&nbsp;</p>
+<hr />
+<p>CONFIDENTIAL</p>
+</div>
+</div>
+</body>
+</html>
