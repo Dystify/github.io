@@ -439,6 +439,9 @@ function TocObject()
       return true;
     return false
   };
+  this.currentLevel = -1;
+  this.parentUrl = "";
+  this.prevUrl = "";
   this.pageNaviObjects = {};
   this.pageParentList = [];
   this.getPageNaviObjectId = function(url)
@@ -723,7 +726,7 @@ function TocObject()
       var x = this._dataHierarchy[n];
       if(n > 0)
         hierarchy += "_";
-      hierarchy += (x < 100 ? x < 10 ? "00" : "0" : "") + x
+      hierarchy += (x < 10 ? "0" : "") + x
     }
     return hierarchy
   };
@@ -780,7 +783,27 @@ function TocObject()
     data.disablePrintPage = typeof noPrint !== "undefined" ? noPrint : false;
     this.arrayData.push(data);
     if(data.disablePrintPage)
-      return
+      return;
+    var newId = this.setPageNaviObject(url);
+    if(!this.isNullOrEmpty(newId))
+    {
+      var obj = this.getPageNaviObject(newId);
+      if(obj != null)
+      {
+        obj.level = level;
+        obj.title = name;
+        obj.prevId = this.getPageNaviObjectId(this.prevUrl);
+        var prev = this.getPageNaviObject(obj.prevId);
+        if(prev != null)
+          prev.nextId = this.getPageNaviObjectId(url);
+        if(level > 0)
+          obj.parentId = this.getPageNaviObjectId(this.pageParentList[level - 1]);
+        obj.disablePrintPage = data.disablePrintPage
+      }
+      this.pageParentList[level] = url;
+      this.prevUrl = url;
+      this.currentLevel = level
+    }
   };
   this.addSectionHeader = function(category, level, name, url, id, noPrint, hierarchy)
   {
@@ -876,7 +899,7 @@ function TocObject()
     var label = "";
     var url = "";
     var text = "";
-    if(data.getType().match(/^man/i))
+    if(data.getType().match(/^man|^guideline/i))
     {
       level = "?level=" + data.getQuery() + "&figure=" + data.getFigureNo() + "&table=" + data.getTableNo() + "&code=" + data.getCodeNo();
       label = data.getLabel()
@@ -888,17 +911,17 @@ function TocObject()
       url = text;
     else
     {
-      var target = this.isEnableTarget() ? ' target="' + this.getTargetName() + '"' : '';
+      var target = this.isEnableTarget() ? " target=\"" + this.getTargetName() + "\"" : "";
       var id = data.getID() == "" ? "" : "#" + data.getID();
       if(data.getType().match(/external/i))
-        url = '<a href="' + this.rootURL + 'external.html?file=' + url + '"' + target + '>' + text + '</a>';
+        url = "<a href=\"" + this.rootURL + "external.html?file=" + url + "\"" + target + ">" + text + "</a>";
       else if(data.getType().match(/rawurl/i))
         if(this.isEnableTarget())
-          url = '<a href="' + url + '"' + target + '>' + text + '</a>';
+          url = "<a href=\"" + url + "\"" + target + ">" + text + "</a>";
         else
-          url = '<a href="' + url + '" target="_blank">' + text + '</a>';
+          url = "<a href=\"" + url + "\" target=\"_blank\">" + text + "</a>";
       else
-        url = '<a href="' + this.rootURL + url + level + id + '"' + target + '>' + text + '</a>'
+        url = "<a href=\"" + this.rootURL + url + level + id + "\"" + target + ">" + text + "</a>"
     }
     return url
   };
@@ -922,6 +945,7 @@ function TocObject()
       code = data.getCodeNo()
     }
     url = data.getURL();
+    var displayNumber = data.getType().match(/section/i) ? false : this.isDisplayNumber();
     text = (this.isDisplayNumber() && label != "" ? label + " " : "") + data.getText();
     text = text.replace(/&/ig,"&amp;").replace(/</ig,"&lt;").replace(/>/ig,"&gt;");
     if(url == "")
@@ -931,14 +955,14 @@ function TocObject()
       var target = this.isEnableTarget() ? this.getTargetName() : "";
       var id = data.getID() == "" ? "" : "#" + data.getID();
       if(data.getType().match(/external/i))
-        url = '<a href="javascript: Guideline.viewPage(\'' + this.rootURL + 'external.html?file=' + url + '\',\'' + target + '\',\'1\',1,1,1);">' + text + '</a>';
+        url = "<a href=\"javascript: Guideline.viewPage('" + this.rootURL + "external.html?file=" + url + "','" + target + "','1',1,1,1);\">" + text + "</a>";
       else if(data.getType().match(/rawurl/i))
         if(this.isEnableTarget())
-          url = '<a href="' + url + '" target="' + target + '">' + text + '</a>';
+          url = "<a href=\"" + url + "\" target=\"" + target + "\">" + text + "</a>";
         else
-          url = '<a href="' + url + '" target="_blank">' + text + '</a>';
+          url = "<a href=\"" + url + "\" target=\"_blank\">" + text + "</a>";
       else
-        url = '<a href="javascript: Guideline.viewPage(\'' + this.rootURL + url + id + '\',\'' + target + '\',\'' + level + '\',' + figure + ',' + table + ',' + code + ');">' + text + '</a>'
+        url = "<a href=\"javascript: Guideline.viewPage('" + this.rootURL + url + id + "','" + target + "','" + level + "'," + figure + "," + table + "," + code + ");\">" + text + "</a>"
     }
     return url
   };
@@ -961,24 +985,6 @@ function TocObject()
       var baselevel = data.getBaselevel();
       var dataType = data.getType();
       var currentURL = data.getURL();
-      var newId = this.setPageNaviObject(currentURL);
-      if(!this.isNullOrEmpty(newId))
-      {
-        var obj = this.getPageNaviObject(newId);
-        if(obj != null)
-        {
-          obj.level = currentLevel;
-          obj.title = data.getText();
-          obj.prevId = this.getPageNaviObjectId(prevURL);
-          var prev = this.getPageNaviObject(obj.prevId);
-          if(prev != null)
-            prev.nextId = this.getPageNaviObjectId(currentURL);
-          if(currentLevel > 0)
-            obj.parentId = this.getPageNaviObjectId(this.pageParentList[currentLevel - 1]);
-          obj.disablePrintPage = data.disablePrintPage
-        }
-        this.pageParentList[currentLevel] = currentURL
-      }
       if(currentLevel > prevLevel)
         if(i > 0)
           this.getData(i - 1).enableExpand();
@@ -1067,8 +1073,8 @@ function TocObject()
         obj.action = this.rootURL + TemplateSettings.searchFileName;
         obj.method = "GET";
         var formHtml = "";
-        formHtml += '<input type="text" id="search_mini_text" name="q" class="' + TemplateSettings.searchBoxMiniTextStyle + '" /> ';
-        formHtml += '<input type="submit" class="' + TemplateSettings.searchBoxMiniButtonStyle + '" value="" />';
+        formHtml += "<input type=\"text\" id=\"search_mini_text\" name=\"q\" class=\"" + TemplateSettings.searchBoxMiniTextStyle + "\" /> ";
+        formHtml += "<input type=\"submit\" class=\"" + TemplateSettings.searchBoxMiniButtonStyle + "\" value=\"\" />";
         obj.innerHTML = formHtml;
         obj.onsubmit = function()
         {
@@ -1087,7 +1093,7 @@ function TocObject()
     if(elem != null)
     {
       var str = "";
-      str += '<select id="' + TemplateSettings.selectCategoryId + '" name="category" size="1" class="' + TemplateSettings.styleSelectCategory + '" onChange="Reassemble.viewPrintPage();">' + '<option value="">' + LocaleString.lcStrLabelSelectChapter + '</option>' + '</select><br />';
+      str += "<select id=\"" + TemplateSettings.selectCategoryId + "\" name=\"category\" size=\"1\" class=\"" + TemplateSettings.styleSelectCategory + "\" onChange=\"Reassemble.viewPrintPage();\">" + "<option value=\"\">" + LocaleString.lcStrLabelSelectChapter + "</option>" + "</select><br />";
       elem.innerHTML += str;
       elem.style.display = "none";
       var selectObj = document.getElementById(TemplateSettings.selectCategoryId);
@@ -1099,7 +1105,7 @@ function TocObject()
           if(data != null && data.getType().match(/^(guideline_section|header|man_header)$/i))
           {
             var optObj = document.createElement("OPTION");
-            optObj.innerHTML = (data.getType().match(/^man/i) && this.isDisplayNumber() && data.getLabel() != "" ? data.getLabel() + " " : "") + data.getText();
+            optObj.innerHTML = (data.getType().match(/^man|^guideline/i) && this.isDisplayNumber() && data.getLabel() != "" ? data.getLabel() + " " : "") + data.getText();
             optObj.value = data.getCategory();
             selectObj.appendChild(optObj)
           }
@@ -1141,9 +1147,9 @@ function TocObject()
         var objDIV = document.createElement("DIV");
         objDIV.className = ExpandFolder.styleLineIconDiv;
         if(dataType.match(/^separator$/i))
-          objDIV.innerHTML = '<hr class="' + TemplateSettings.styleSeparatorLine + '">';
+          objDIV.innerHTML = "<hr class=\"" + TemplateSettings.styleSeparatorLine + "\">";
         else if(dataType.match(/^blank$/i))
-          objDIV.innerHTML = '<br>';
+          objDIV.innerHTML = "<br>";
         else
         {
           var objSPAN = document.createElement("SPAN");
@@ -1159,7 +1165,7 @@ function TocObject()
           }
           if(this.modeAnchor)
             objSPAN.innerHTML = this.makeAnchorURL(data);
-          else if(dataType.match(/^man/i))
+          else if(dataType.match(/^man|^guideline/i))
             objSPAN.innerHTML = this.makeGetURL(data);
           else
             objSPAN.innerHTML = this.makeAnchorURL(data);
@@ -1206,7 +1212,7 @@ function TocObject()
     }
   }
 }
-var Reassemble = Reassemble || function(){};
+var Reassemble = function(){};
 Reassemble.autoindexContentWidth = TemplateSettings.autoindexContentWidth;
 Reassemble.autoindexToggleWidth = TemplateSettings.autoindexToggleWidth;
 Reassemble.globalindexContentWidth = TemplateSettings.globalindexContentWidth;
@@ -1235,7 +1241,7 @@ Reassemble.selectorGlobalindexWrapperDiv = "#" + Reassemble.globalindexWrapperId
 Reassemble.selectorGlobalindexTabDiv = "#" + Reassemble.globalindexTabId;
 Reassemble.selectorGlobalindexToggleDiv = "#" + Reassemble.globalindexToggleId;
 Reassemble.selectorGlobalindexEdgeDiv = "#" + Reassemble.globalindexEdgeId;
-Reassemble.objectTocData = Reassemble.objectTocData || new TocObject;
+Reassemble.objectTocData = null;
 Reassemble.autoindexEnabled = false;
 Reassemble.globalindexEnabled = false;
 Reassemble.autoindexScrollTarget = null;
@@ -1421,26 +1427,6 @@ Reassemble.autoindexToggleClass = function(a, b, d)
 };
 Reassemble.reassemble = function()
 {
-  var enableAddon = false;
-  var loader = new DynLoader(Reassemble.reassembleImpl,false);
-  if(typeof AddonList !== "undefined" && $.isArray(AddonList))
-    for(var n = 0, len = AddonList.length; n < len; n++)
-    {
-      var addonName = AddonList[n];
-      if(addonName != "")
-      {
-        enableAddon = true;
-        loader.addFile(addonName,TemplateSettings.getRootPath() + "Addon_" + addonName + "/tocData.js")
-      }
-    }
-  if(enableAddon)
-    loader.load();
-  else
-    Reassemble.reassembleImpl()
-};
-Reassemble.reassembleImpl = function()
-{
-  Reassemble.objectTocData.processTreeData();
   var levels = "1";
   var figures = "";
   var tables = "";
@@ -1556,15 +1542,10 @@ Reassemble.reassembleImpl = function()
           noReset = false
       }
       else if(key.match(/^forcenoindex$/i))
-      {
         if(data.match(/^yes$|^true$/i))
           forceNoIndex = true;
         else if(data.match(/^no$|^false$/i))
           forceNoIndex = false
-      }
-      else if(key.match(/^printpage$/i))
-        if(data.match(/^yes$|^true$/i))
-          PrintPage.createPrintPage(window,Reassemble.objectTocData)
     }
     if(startLevel < 1)
       startLevel = 1;
@@ -1795,21 +1776,21 @@ Reassemble.reassembleImpl = function()
     Reassemble.autoindexEnabled = true;
     var objDivContent = document.getElementById(Reassemble.autoindexContentId);
     if(objDivContent == null)
-      $("body").wrapInner('<div id="' + Reassemble.autoindexContentId + '"></div>');
+      $("body").wrapInner("<div id=\"" + Reassemble.autoindexContentId + "\"></div>");
     var objDivWrapper = document.getElementById(Reassemble.autoindexWrapperId);
     if(objDivWrapper == null)
-      $("body").prepend('<div id="' + Reassemble.autoindexWrapperId + '"></div>');
+      $("body").prepend("<div id=\"" + Reassemble.autoindexWrapperId + "\"></div>");
     var objDivIndex = document.getElementById(Reassemble.autoindexTabId);
     if(objDivIndex == null)
-      $(Reassemble.selectorAutoindexWrapperDiv).prepend('<div id="' + Reassemble.autoindexTabId + '"></div>');
+      $(Reassemble.selectorAutoindexWrapperDiv).prepend("<div id=\"" + Reassemble.autoindexTabId + "\"></div>");
     var objDivToggle = document.getElementById(Reassemble.autoindexToggleId);
     if(objDivToggle == null)
-      $(Reassemble.selectorAutoindexWrapperDiv).prepend('<div id="' + Reassemble.autoindexToggleId + '"></div>');
+      $(Reassemble.selectorAutoindexWrapperDiv).prepend("<div id=\"" + Reassemble.autoindexToggleId + "\"></div>");
     if(baseLevel > 6)
       baseLevel = baseLevelNone;
     var prev = 0;
-    var strHtml = '<ul>';
-    strHtml += '<li><a href="#' + Reassemble.autoindexContentId + '" class="toplevel">' + LocaleString.lcStrLabelAcTopLevel + '</a></li>';
+    var strHtml = "<ul>";
+    strHtml += "<li><a href=\"#" + Reassemble.autoindexContentId + "\" class=\"toplevel\">" + LocaleString.lcStrLabelAcTopLevel + "</a></li>";
     for(var i = 0; i < arrayIndex.length; i++)
     {
       var inds = arrayIndex[i].split("\t");
@@ -1823,16 +1804,16 @@ Reassemble.reassembleImpl = function()
           level = 0;
         if(level < prev)
           for(var x = prev; x > level; x--)
-            strHtml += '</ul>';
+            strHtml += "</ul>";
         else if(level > prev)
           for(var x = prev; x < level; x++)
-            strHtml += '<ul>';
-        strHtml += '<li><a href="#' + id + '" class="level' + level + '">' + text + '</a></li>';
+            strHtml += "<ul>";
+        strHtml += "<li><a href=\"#" + id + "\" class=\"level" + level + "\">" + text + "</a></li>";
         prev = level
       }
     }
     for(var x = prev; x > 0; x--)
-      strHtml += '</ul>';
+      strHtml += "</ul>";
     $(Reassemble.selectorAutoindexContentDiv).attr("class",Reassemble.styleAutoindexContent);
     $(Reassemble.selectorAutoindexTabDiv).attr("class",Reassemble.styleAutoindexTab).html(strHtml);
     $(Reassemble.selectorAutoindexToggleDiv).attr("class",Reassemble.styleAutoindexToggle).click(Reassemble.autoindexToggleHandler);
@@ -1893,25 +1874,25 @@ Reassemble.reassembleImpl = function()
           {
             var expandId = pageId + "-related";
             var content = "";
-            content += '<div class="panel" style="border-width: 1px;">';
-            content += '<div class="panelHeader" style="border-bottom-width: 1px;">';
-            content += '<div class="expand-control" id="expander-control-' + expandId + '">';
-            content += '<span class="expand-control-icon collapsed-icon"> </span>';
-            content += '<span class="expand-control-text"><b>' + Reassemble.escapeHtml(LocaleString.lcStrRelatedLinks) + '</b></span>';
-            content += '</div>';
-            content += '</div>';
-            content += '<div class="panelContent">';
-            content += '<div class="expand-content expand-hidden" id="expander-content-' + expandId + '">';
-            content += '<ul>';
+            content += "<div class=\"panel\" style=\"border-width: 1px;\">";
+            content += "<div class=\"panelHeader\" style=\"border-bottom-width: 1px;\">";
+            content += "<div class=\"expand-control\" id=\"expander-control-" + expandId + "\">";
+            content += "<span class=\"expand-control-icon collapsed-icon\"> </span>";
+            content += "<span class=\"expand-control-text\"><b>" + Reassemble.escapeHtml(LocaleString.lcStrRelatedLinks) + "</b></span>";
+            content += "</div>";
+            content += "</div>";
+            content += "<div class=\"panelContent\">";
+            content += "<div class=\"expand-content expand-hidden\" id=\"expander-content-" + expandId + "\">";
+            content += "<ul>";
             for(var n = 0; n < linkList.length; n++)
             {
               var linkObject = linkList[n];
-              content += '<li><a href="../' + linkObject["url"] + '">' + Reassemble.escapeHtml(linkObject["title"]) + '</a></li>'
+              content += "<li><a href=\"../" + linkObject["url"] + "\">" + Reassemble.escapeHtml(linkObject["title"]) + "</a></li>"
             }
-            content += '</ul>';
-            content += '</div>';
-            content += '</div>';
-            content += '</div>';
+            content += "</ul>";
+            content += "</div>";
+            content += "</div>";
+            content += "</div>";
             $(this).html(content).addClass("related-links-exist");
             $("#expander-control-" + expandId).click(function()
             {
@@ -1922,20 +1903,20 @@ Reassemble.reassembleImpl = function()
       }
     })
   }
-  if(!forceNoIndex && typeof jQuery === "function" && $(TemplateSettings.selectorTocFile).attr("src") != null && Reassemble.objectTocData == null)
+  if(!forceNoIndex && typeof jQuery == "function" && $(TemplateSettings.selectorTocFile).attr("src") != null && Reassemble.objectTocData == null)
     alert(LocaleString.lcStrMessageNothingToc);
-  if(!forceNoIndex && typeof jQuery === "function" && $(TemplateSettings.selectorTocFile).attr("src") != null && Reassemble.objectTocData != null)
+  if(!forceNoIndex && typeof jQuery == "function" && $(TemplateSettings.selectorTocFile).attr("src") != null && Reassemble.objectTocData != null)
   {
     Reassemble.globalindexEnabled = true;
     var objDivContent = document.getElementById(Reassemble.autoindexContentId);
     if(objDivContent == null)
-      $("body").wrapInner('<div id="' + Reassemble.autoindexContentId + '"></div>');
+      $("body").wrapInner("<div id=\"" + Reassemble.autoindexContentId + "\"></div>");
     $(Reassemble.selectorAutoindexContentDiv).attr("class",Reassemble.styleAutoindexContent);
-    $("body").prepend('<div id="' + Reassemble.globalindexWrapperId + '"><div id="' + Reassemble.globalindexToggleId + '"></div><div id="' + Reassemble.globalindexTabId + '"></div><div id="' + Reassemble.globalindexEdgeId + '"></div></div>');
+    $("body").prepend("<div id=\"" + Reassemble.globalindexWrapperId + "\"><div id=\"" + Reassemble.globalindexToggleId + "\"></div><div id=\"" + Reassemble.globalindexTabId + "\"></div><div id=\"" + Reassemble.globalindexEdgeId + "\"></div></div>");
     $(Reassemble.selectorGlobalindexEdgeDiv).bind("mousedown",Reassemble.startUpdatingWidth);
     $("body").bind("mousemove",Reassemble.updatingWidth).bind("mouseup",Reassemble.endUpdatingWidth);
-    $(Reassemble.selectorGlobalindexTabDiv).prepend('<div id="' + Reassemble.globalindexRootPaneId + '"></div>');
-    $("#" + Reassemble.globalindexRootPaneId).html('<div id="' + TemplateSettings.titleLogoDivId + '" class="' + TemplateSettings.styleTitleLogoDiv + '" align="center"></div>' + '<div id="' + TemplateSettings.titleTocDivId + '" class="' + TemplateSettings.styleTitleTocDiv + '" align="center"></div>' + '<div id="' + TemplateSettings.searchBoxMiniDivId + '" align="center"></div>' + '<div id="' + TemplateSettings.printControllerId + '" align="left"></div>' + '<div id="' + TemplateSettings.treeControllerId + '"></div>' + '<div id="' + TemplateSettings.divTreePaneId + '" class="' + TemplateSettings.styleTreePane + '">' + '</div>');
+    $(Reassemble.selectorGlobalindexTabDiv).prepend("<div id=\"" + Reassemble.globalindexRootPaneId + "\"></div>");
+    $("#" + Reassemble.globalindexRootPaneId).html("<div id=\"" + TemplateSettings.titleLogoDivId + "\" class=\"" + TemplateSettings.styleTitleLogoDiv + "\" align=\"center\"></div>" + "<div id=\"" + TemplateSettings.titleTocDivId + "\" class=\"" + TemplateSettings.styleTitleTocDiv + "\" align=\"center\"></div>" + "<div id=\"" + TemplateSettings.searchBoxMiniDivId + "\" align=\"center\"></div>" + "<div id=\"" + TemplateSettings.printControllerId + "\" align=\"left\"></div>" + "<div id=\"" + TemplateSettings.treeControllerId + "\"></div>" + "<div id=\"" + TemplateSettings.divTreePaneId + "\" class=\"" + TemplateSettings.styleTreePane + "\">" + "</div>");
     if(Reassemble.objectTocData != null && Reassemble.objectTocData.isEnabledSelectPackage())
       Guideline.setupPackageList();
     Reassemble.loadViewMode();
@@ -1944,11 +1925,11 @@ Reassemble.reassembleImpl = function()
     {
       objPrintController.style.display = "none";
       var htmlPrintController = "";
-      htmlPrintController += '<div id="' + TemplateSettings.printControllerBaseId + '">';
-      htmlPrintController += '<div id="' + TemplateSettings.printControllerTitleId + '"></div>';
-      htmlPrintController += '<div id="' + TemplateSettings.printControllerIconId + '"><input type="button" value=" " id="' + TemplateSettings.printControllerButtonId + '" onClick="Reassemble.togglePrintSettingButton()" title=""/></div>';
-      htmlPrintController += '</div>';
-      htmlPrintController += '<div id="' + TemplateSettings.printControllerPaneId + '"></div>';
+      htmlPrintController += "<div id=\"" + TemplateSettings.printControllerBaseId + "\">";
+      htmlPrintController += "<div id=\"" + TemplateSettings.printControllerTitleId + "\"></div>";
+      htmlPrintController += "<div id=\"" + TemplateSettings.printControllerIconId + "\"><input type=\"button\" value=\" \" id=\"" + TemplateSettings.printControllerButtonId + "\" onClick=\"Reassemble.togglePrintSettingButton()\" title=\"\"/></div>";
+      htmlPrintController += "</div>";
+      htmlPrintController += "<div id=\"" + TemplateSettings.printControllerPaneId + "\"></div>";
       objPrintController.innerHTML = htmlPrintController;
       if(Reassemble.objectTocData != null && Reassemble.objectTocData.isEnablePrintSetting())
       {
@@ -1965,18 +1946,14 @@ Reassemble.reassembleImpl = function()
           objButton.title = toolTip;
           if(Reassemble.objectTocData != null && Reassemble.objectTocData.isEnablePrintPage())
           {
-            var labels = [LocaleString.lcStrLabelModeAll,LocaleString.lcStrLabelModeDesc,LocaleString.lcStrLabelModeItem];
-            var htmlRadio = '';
-            for(var n = 0, len = labels.length; n < len; n++)
-              htmlRadio += '<input type="radio" id="' + TemplateSettings.changeViewModeIdPrefix + n + '" name="mode" value="' + n + '" onClick="Reassemble.changeViewMode(\'' + n + '\');" ' + (Reassemble.viewMode == n ? 'checked ' : '') + ' /><label>' + labels[n] + '</label><br />';
-            htmlRadio += '<br />';
+            var htmlRadio = "<input type=\"radio\" id=\"" + TemplateSettings.changeViewModeIdPrefix + "0\" name=\"mode\" value=\"0\" onClick=\"Reassemble.changeViewMode('0');\" " + (Reassemble.viewMode == 0 ? "checked " : "") + " /><label>" + LocaleString.lcStrLabelModeAll + "</label><br />" + "<input type=\"radio\" id=\"" + TemplateSettings.changeViewModeIdPrefix + "1\" name=\"mode\" value=\"1\" onClick=\"Reassemble.changeViewMode('1');\" " + (Reassemble.viewMode == 1 ? "checked " : "") + "/><label>" + LocaleString.lcStrLabelModeDesc + "</label><br />" + "<input type=\"radio\" id=\"" + TemplateSettings.changeViewModeIdPrefix + "2\" name=\"mode\" value=\"2\" onClick=\"Reassemble.changeViewMode('2');\" " + (Reassemble.viewMode == 2 ? "checked " : "") + "/><label>" + LocaleString.lcStrLabelModeItem + "</label><br />" + "<br />";
             objPane.innerHTML = htmlRadio
           }
         }
         objPrintController.style.display = "block"
       }
     }
-    var htmlExpand = '<input type="button" value="' + Reassemble.escapeHtml(LocaleString.lcStrTitleOpenAll) + '" onClick="ExpandFolder.openAll();" />&nbsp;' + '<input type="button" value="' + Reassemble.escapeHtml(LocaleString.lcStrTitleCloseAll) + '" onClick="ExpandFolder.closeAll();" />&nbsp;';
+    var htmlExpand = "<input type=\"button\" value=\"" + Reassemble.escapeHtml(LocaleString.lcStrTitleOpenAll) + "\" onClick=\"ExpandFolder.openAll();\" />&nbsp;" + "<input type=\"button\" value=\"" + Reassemble.escapeHtml(LocaleString.lcStrTitleCloseAll) + "\" onClick=\"ExpandFolder.closeAll();\" />&nbsp;";
     $("#" + TemplateSettings.treeControllerId).html(htmlExpand);
     $(Reassemble.selectorGlobalindexToggleDiv).click(Reassemble.globalindexToggleHandler);
     $(Reassemble.selectorGlobalindexWrapperDiv).attr(Reassemble.globalindexToggleAttrId,"1");
@@ -2024,7 +2001,7 @@ Reassemble.reassembleImpl = function()
         $(document).ready(Reassemble.highlightText(document,document.body,strReg,"search_highlight"))
     }
   }
-  if(Reassemble.objectTocData != null && typeof jQuery === "function")
+  if(Reassemble.objectTocData != null && typeof jQuery == "function")
   {
     var manager = Reassemble.objectTocData;
     var breadCrumb = $("div.breadcrumb,div.breadcrumb_bottom");
@@ -2047,7 +2024,7 @@ Reassemble.reassembleImpl = function()
         {
           if(pobj == null)
             break;
-          breadcrumbtext = '<a href="' + manager.getRootURL() + pobj.currentUrl + '">' + Reassemble.escapeHtml(pobj.title) + '</a>' + Reassemble.escapeHtml(' > ') + breadcrumbtext;
+          breadcrumbtext = "<a href=\"" + manager.getRootURL() + pobj.currentUrl + "\">" + Reassemble.escapeHtml(pobj.title) + "</a>" + Reassemble.escapeHtml(" > ") + breadcrumbtext;
           pobj = manager.getPageNaviObject(pobj.parentId)
         }
         breadCrumb.html(breadcrumbtext)
@@ -2061,13 +2038,13 @@ Reassemble.reassembleImpl = function()
           if(!obj.disablePrintPage)
           {
             linktext = Reassemble.escapeHtml("<< " + obj.title);
-            linktext = '<a href="' + manager.getRootURL() + obj.currentUrl + '">' + linktext + '</a>'
+            linktext = "<a href=\"" + manager.getRootURL() + obj.currentUrl + "\">" + linktext + "</a>"
           }
         }
         else
         {
           linktext = Reassemble.escapeHtml("<< " + LocaleString.lcStrTopPageName);
-          linktext = '<a href="' + manager.getRootURL() + 'title.html">' + linktext + '</a>'
+          linktext = "<a href=\"" + manager.getRootURL() + "title.html\">" + linktext + "</a>"
         }
         prevCell.html(linktext)
       }
@@ -2080,7 +2057,7 @@ Reassemble.reassembleImpl = function()
           if(!obj.disablePrintPage)
           {
             linktext = Reassemble.escapeHtml(obj.title + " >>");
-            linktext = '<a href="' + manager.getRootURL() + obj.currentUrl + '">' + linktext + '</a>'
+            linktext = "<a href=\"" + manager.getRootURL() + obj.currentUrl + "\">" + linktext + "</a>"
           }
         }
         else
@@ -2094,9 +2071,9 @@ Reassemble.reassembleImpl = function()
   Reassemble.changePrintSettingButtonFace();
   Reassemble.resizeHandler();
   Reassemble.scrollHandler();
-  if(chaseIndexURL && typeof jQuery === "function")
+  if(chaseIndexURL && typeof jQuery == "function")
     Reassemble.scrollIndexURL(location.href);
-  if(typeof jQuery === "function")
+  if(typeof jQuery == "function")
   {
     $("table.codeblock td.code").each(function()
     {
@@ -2515,7 +2492,7 @@ Reassemble.changePackageCss = function()
       {
         var msg = opt[0];
         if(msg != "")
-          self.next().prepend('<div class="excludedLabel">' + msg.replace(/{package}/ig,packageName) + '</div>');
+          self.next().prepend("<div class=\"excludedLabel\">" + msg.replace(/{package}/ig,packageName) + "</div>");
         var nClass = opt[1];
         if(nClass)
         {
@@ -2965,7 +2942,7 @@ Guideline.setupPackageListImpl = function()
     var obj = document.getElementById(TemplateSettings.selectPackageId);
     if(obj == null)
     {
-      var htmlSelect = '<select id="' + TemplateSettings.selectPackageId + '" onchange="Reassemble.changePackage();"></select><br />';
+      var htmlSelect = "<select id=\"" + TemplateSettings.selectPackageId + "\" onchange=\"Reassemble.changePackage();\"></select><br />";
       var tmpPrintController = $("#" + TemplateSettings.printControllerId).html();
       $("#" + TemplateSettings.printControllerId).html(htmlSelect + tmpPrintController);
       obj = document.getElementById(TemplateSettings.selectPackageId)
@@ -2992,36 +2969,6 @@ var Search = function(){};
 Search.resultCount = 0;
 Search.indexData = [];
 Search.search = function(query, msgId, dstId, api, skip)
-{
-  var enableAddon = false;
-  var loader = new DynLoader(Search.searchImpl,false);
-  loader.option = {
-    query: query,
-    msgId: msgId,
-    dstId: dstId,
-    api: api,
-    skip: skip
-  };
-  if(typeof AddonList !== "undefined" && $.isArray(AddonList))
-    for(var n = 0, len = AddonList.length; n < len; n++)
-    {
-      var addonName = AddonList[n];
-      if(addonName != "")
-      {
-        enableAddon = true;
-        loader.addFile(addonName,TemplateSettings.getRootPath() + "Addon_" + addonName + "/searchindex.js")
-      }
-    }
-  if(enableAddon)
-    loader.load();
-  else
-    Search.goSearch(query,msgId,dstId,api,skip)
-};
-Search.searchImpl = function(param)
-{
-  Search.goSearch(param.option.query,param.option.msgId,param.option.dstId,param.option.api,param.option.skip)
-};
-Search.goSearch = function(query, msgId, dstId, api, skip)
 {
   var sobj = document.getElementById(msgId);
   var dobj = document.getElementById(dstId);
@@ -3415,270 +3362,4 @@ Search.extractTextFromTag = function(html, tag, attr, before, after, convertLF)
       ret = ret.slice(0,pos) + strBefore + work.slice(0,epos) + strAfter + work.slice(epos + lenE)
   }
   return ret
-};
-var DynLoader = function(func, useAjax, loadAsync)
-  {
-    this.firefunc = func;
-    this.filelist = new Array;
-    this.deferlist = new Array;
-    this.keylist = [];
-    this.modeAjax = useAjax !== undefined && useAjax ? true : false;
-    this.async = loadAsync !== undefined && loadAsync ? true : false;
-    this.timeout = 3 * 60 * 1000
-  };
-DynLoader.prototype = {
-  reset: function()
-  {
-    this.filelist = new Array;
-    this.deferlist = new Array;
-    this.keylist = []
-  },
-  setCallback: function(func)
-  {
-    this.firefunc = func
-  },
-  setAjaxMode: function(mode)
-  {
-    this.modeAjax = mode !== undefined && mode ? true : false
-  },
-  setLoadAsync: function(mode)
-  {
-    this.async = mode !== undefined && mode ? true : false
-  },
-  setTimeout: function(timeout)
-  {
-    this.timeout = timeout !== undefined ? timeout : 3 * 60 * 1000
-  },
-  addFile: function(datakey, filename, force)
-  {
-    this.filelist.push({
-      key: datakey,
-      file: filename,
-      data: null,
-      done: false,
-      exist: false,
-      error: false,
-      force: force !== undefined && force,
-      json: false
-    });
-    this.keylist[datakey] = this.filelist.length - 1
-  },
-  addFileJSON: function(datakey, filename, force)
-  {
-    this.filelist.push({
-      key: datakey,
-      file: filename,
-      data: null,
-      done: false,
-      exist: false,
-      error: false,
-      force: force !== undefined && force,
-      json: true
-    });
-    this.keylist[datakey] = this.filelist.length - 1
-  },
-  getData: function(datakey)
-  {
-    if(this.keylist[datakey] != null)
-      return this.filelist[this.keylist[datakey]];
-    return null
-  },
-  isComplete: function()
-  {
-    for(var i = 0; i < this.filelist.length; i++)
-    {
-      var data = this.filelist[i];
-      if(data == null)
-        continue;
-      if(data.done)
-        continue;
-      return false
-    }
-    return true
-  },
-  isSuccess: function()
-  {
-    for(var i = 0; i < this.filelist.length; i++)
-    {
-      var data = this.filelist[i];
-      if(data == null)
-        continue;
-      if(!data.done)
-        return false;
-      if(data.error)
-        return false
-    }
-    return true
-  },
-  isAvailableForLocalFile: function()
-  {
-    if(isChrome() && this.modeAjax)
-      return false;
-    return true
-  },
-  isAjaxMode: function()
-  {
-    return this.modeAjax
-  },
-  successFunc: function(param, datakey, data)
-  {
-    if(param != null && datakey != null)
-    {
-      var obj = param.getData(datakey);
-      if(obj != null)
-      {
-        obj.done = true;
-        obj.error = false;
-        obj.exist = data != null;
-        obj.data = data
-      }
-      if(param.isComplete() && param.firefunc != null)
-        param.firefunc(param)
-    }
-    else
-      console.error("DynLoader.successFunc: parameter error!")
-  },
-  errorFunc: function(param, datakey, data)
-  {
-    if(param != null && datakey != null)
-    {
-      var obj = param.getData(datakey);
-      if(obj != null)
-      {
-        obj.done = true;
-        obj.error = true;
-        obj.exist = false;
-        obj.data = null
-      }
-      if(param.isComplete() && param.firefunc != null)
-        param.firefunc(param)
-    }
-    else
-      console.error("DynLoader.errorFunc: parameter error!")
-  },
-  load: function()
-  {
-    if(this.filelist == null)
-    {
-      console.error("DynLoader.load: filelist is null.");
-      return
-    }
-    if(this.filelist.length == 0)
-    {
-      console.error("DynLoader.load: filelist is empty.");
-      return
-    }
-    if(this.isAjaxMode())
-      this.loadByAjax();
-    else
-      this.loadByScript()
-  },
-  loadByAjax: function()
-  {
-    for(var i = 0; i < this.filelist.length; i++)
-    {
-      var obj = this.filelist[i];
-      if(obj == null)
-        continue;
-      obj["option"] = {
-        param: this,
-        key: obj.key,
-        successFunc: this.successFunc,
-        errorFunc: this.errorFunc
-      };
-      var deferred = $.ajax({
-          async: this.async,
-          context: obj.option,
-          timeout: this.timeout,
-          url: obj.file,
-          dataType: obj.json ? "json" : "script"
-        }).then(function(data)
-        {
-          this.successFunc(this.param,this.key,data)
-        },function(data)
-        {
-          this.errorFunc(this.param,this.key,data)
-        });
-      this.deferlist.push(deferred)
-    }
-  },
-  loadByScript: function()
-  {
-    var _self = this;
-    for(var i = 0; i < this.filelist.length; i++)
-    {
-      var obj = this.filelist[i];
-      if(obj == null)
-        continue;
-      obj["option"] = {
-        param: _self,
-        key: obj.key,
-        successFunc: _self.successFunc,
-        errorFunc: _self.errorFunc
-      };
-      obj["errorCB"] = function()
-      {
-        var option = this.UtilityOption;
-        if(option != null)
-          option.errorFunc(option.param,option.key,null)
-      };
-      obj["loadCB"] = function()
-      {
-        var option = this.UtilityOption;
-        if(option != null)
-          option.successFunc(option.param,option.key,null)
-      };
-      obj["readyCB"] = function()
-      {
-        switch(script.readyState)
-        {
-          case"complete":
-          case"loaded":
-            var option = this.UtilityOption;
-            if(option != null)
-              option.successFunc(option.param,option.key,null);
-            break
-        }
-      };
-      var script = this.addJavaScript(obj.file,obj.readyCB,obj.loadCB,obj.errorCB,obj.force,obj.option);
-      if(script != null)
-        obj["script"] = script
-    }
-  },
-  addJavaScript: function(url, readyCB, loadCB, errorCB, force, option)
-  {
-    if(url != "")
-    {
-      var heads = document.getElementsByTagName("head");
-      if(heads.length > 0)
-      {
-        var scripts = heads[0].getElementsByTagName("script");
-        for(var i = 0; i < scripts.length; i++)
-          if(scripts[i].src != null && scripts[i].src.indexOf(url) != -1)
-          {
-            if(!force)
-              return null;
-            scripts[i].remove();
-            break
-          }
-        var obj = document.createElement("script");
-        if(obj != null)
-        {
-          obj.type = "text/javascript";
-          obj.src = url;
-          if(readyCB != null)
-            obj.onreadystatechange = readyCB;
-          if(loadCB != null)
-            obj.onload = loadCB;
-          if(errorCB != null)
-            obj.onerror = errorCB;
-          if(option != null)
-            obj["UtilityOption"] = option;
-          heads[0].appendChild(obj);
-          return obj
-        }
-      }
-    }
-    return null
-  }
 }
