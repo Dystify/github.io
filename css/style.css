@@ -68,7 +68,7 @@ h1,h2,h3,h4,h5,h6,label,p{
 /*---------*/
 /*----*/
 .banner{
-	background:url("../images/banner01.png");
+	background:url("../images/slide01.png");
 	width:100%;
 	display:block;
 	background-size:cover;
@@ -117,7 +117,7 @@ h1,h2,h3,h4,h5,h6,label,p{
 /*--content-top--*/
 /*----*/
 .content-top {
-  padding: 4em 0 0;
+  padding: 0 0 0;
 }
 .col-top-bottom{
 	background: #434343;
@@ -166,6 +166,7 @@ a.now-in:hover{
 	font-size:3.5em;
 	color:#fff;
 	 font-family: 'Philosopher-Bold';	
+	 margin-top:-1em;
 }
 .top-col{
 	padding: 0;
@@ -191,6 +192,7 @@ a.now-in:hover{
 	font-size:3.5em;
 	color:#fff;
 	 font-family: 'Philosopher-Bold';	
+	 margin-top:-0.65em;
 }
 .black:hover .col{
 	display: block;
@@ -427,7 +429,7 @@ ul.footer-grid {
 }
 .da-thumbs li a div {
   position: absolute;
-  background: rgba(234, 76, 137, 1);
+  background: #0097a7;
   width: 100%;
   height: 100%;
 }
@@ -436,7 +438,6 @@ ul.footer-grid {
   padding: 10px 0;
   margin: 10px 20px 0px 20px;
   font-weight: normal;
-  text-transform: capitalize;
   color: rgba(255,255,255,0.9);
   text-align: center;
   font-size: 1.1em;
@@ -447,7 +448,7 @@ ul.footer-grid {
   margin: 2.5em 0 0 0;
  font-family: 'Philosopher-Bold';
   text-align: center;
-}
+} */
 /*--//games--*/		
 /*--about-start--*/
 .about{
@@ -1058,7 +1059,7 @@ h4.media-heading{
 /*--//contact--*/
 /*--typo--*/
 h3.typo1 {
-  font-size: 3.3em;
+  font-size: 3.5em;
   color: #000;
   text-align: center;
     font-family: 'Philosopher-Bold';
